@@ -1,12 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dissolve.Server", "Dissolve.Server\Dissolve.Server.csproj", "{02BD7A32-A000-405E-BB14-FC5E8BD280EB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobBalancer.Server", "JobBalancer.Server\JobBalancer.Server.csproj", "{02BD7A32-A000-405E-BB14-FC5E8BD280EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dissolve.Client", "Dissolve.Client\Dissolve.Client.csproj", "{338336C9-362E-4036-96CD-300D090B5212}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobBalancer.Client", "JobBalancer.Client\JobBalancer.Client.csproj", "{338336C9-362E-4036-96CD-300D090B5212}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dissolve.Shared", "Dissolve.Shared\Dissolve.Shared.csproj", "{4B5A7B20-F282-44A4-9DD8-491F0091AB6F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobBalancer.Shared", "JobBalancer.Shared\JobBalancer.Shared.csproj", "{4B5A7B20-F282-44A4-9DD8-491F0091AB6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dissolve.Server.UnitTests", "Dissolve.Server.UnitTests\Dissolve.Server.UnitTests.csproj", "{32BEA392-A02F-481E-A9E7-32FA1F2FD5C3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobBalancer.Server.UnitTests", "JobBalancer.Server.UnitTests\JobBalancer.Server.UnitTests.csproj", "{32BEA392-A02F-481E-A9E7-32FA1F2FD5C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
