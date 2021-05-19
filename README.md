@@ -58,4 +58,4 @@ Solution for case:
 
 Concept of implementation
 ![alt text]
-(https://github.com/Toolf/MintnInovationTestTask/blob/media/architecture.png)
+(https://github.com/Toolf/MintnInovationTestTask/blob/media/images/architecture.png)
