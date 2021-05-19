@@ -58,4 +58,4 @@ dotnet run
 
 ## Concept of implementation
 
-![alt text](https://github.com/Toolf/MintnInovationTestTask/blob/media/images/architecture.png)
+![alt text](https://github.com/Toolf/MintInovationTestTask/blob/media/images/architecture.png)
