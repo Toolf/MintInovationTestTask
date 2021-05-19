@@ -3,6 +3,7 @@ using System.Linq;
 using JobBalancer.App.Exceptions;
 using JobBalancer.App.Services;
 using JobBalancer.Shared.DTO;
+using JobBalancer.Shared.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JobBalancer.Server.Controllers
@@ -23,18 +24,13 @@ namespace JobBalancer.Server.Controllers
         public ActionResult<JobBalancerResponseDto> SplitJob([FromBody] JobBalancerRequestDto req)
         {
             var imageCount = req.ImageCount;
-            var workers = req.Workers;
-
+            var processingTimes = req.ProcessingTimes;
             try
             {
-                var splitJob = _jobBalancerService.SplitJob(imageCount, workers);
+                var splitJob = _jobBalancerService.SplitJob(imageCount, processingTimes);
                 var responseDto = new JobBalancerResponseDto()
                 {
-                    Work = splitJob.Select((x) => new IndividualWork()
-                    {
-                        Worker = x.Key,
-                        ImageEdit = x.Value
-                    }).ToList()
+                    Work = splitJob
                 };
                 return Ok(responseDto);
             }
@@ -53,11 +49,11 @@ namespace JobBalancer.Server.Controllers
         public ActionResult<int> TotalJobTime([FromBody] JobBalancerRequestDto req)
         {
             var imageCount = req.ImageCount;
-            var workers = req.Workers;
+            var processingTimes = req.ProcessingTimes;
 
             try
             {
-                var totalTime = _jobBalancerService.TotalJobTime(imageCount, workers);
+                var totalTime = _jobBalancerService.TotalJobTime(imageCount, processingTimes);
                 return Ok(totalTime);
             }
             catch (NoWorkersException e)

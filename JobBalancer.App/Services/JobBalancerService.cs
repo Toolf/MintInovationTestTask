@@ -9,8 +9,9 @@ namespace JobBalancer.App.Services
 {
     public class JobBalancerService : IJobBalancerService
     {
-        public Dictionary<ImageEditWorker, int> SplitJob(int imageCount, List<ImageEditWorker> workers)
+        public List<int> SplitJob(int imageCount, List<int> processingTimes)
         {
+            var workers = processingTimes.Select((time, index) => new ImageEditWorker(index, time)).ToList();
             var splitJob = workers.ToDictionary(worker => worker, worker => 0);
 
             // Filter workers with positive time processing.
@@ -69,19 +70,14 @@ namespace JobBalancer.App.Services
                 imageCount -= imageEdited;
             }
 
-            return splitJob;
+            return workers.Select(worker => splitJob[worker]).ToList();
         }
 
-        public int TotalJobTime(int imageCount, List<ImageEditWorker> workers)
+        public int TotalJobTime(int imageCount, List<int> processingTimes)
         {
-            var splitJob = SplitJob(imageCount, workers);
-            var totalTime = 0;
-            foreach (var (worker, individualImageCount) in splitJob)
-            {
-                totalTime = Math.Max(totalTime, worker.TimeProcessing * individualImageCount);
-            }
+            var works = SplitJob(imageCount, processingTimes);
 
-            return totalTime;
+            return processingTimes.Select((t, i) => works[i] * t).Prepend(0).Max();
         }
     }
 }
