@@ -7,9 +7,22 @@ using JobBalancer.Core.Entities;
 
 namespace JobBalancer.App.Services
 {
-    // 
+    /// <summary>Class <c>JobBalancerService</c> has methods for balance
+    /// jobs and determinate total time for execution jobs.</summary>
     public class JobBalancerService : IJobBalancerService
     {
+        /// <summary>Method <c>SplitJob</c> split images between all worker by their processing time.
+        /// <example>For example:
+        /// <code>
+        ///     IJobBalancerService service = new JobBalancerService();
+        ///     var works = service.SplitJob(5, new List<int>(){2,3,4});
+        /// </code>
+        /// result <c>works</c> is (3, 1, 1) 
+        /// </example>
+        /// </summary>
+        /// <exception cref="NoWorkersException"></exception>
+        /// <exception cref="NoWorkersWhichCanWorkException"></exception>
+        /// <exception cref="ArgumentException"></exception>
         public List<int> SplitJob(int imageCount, List<int> processingTimes)
         {
             var workers = processingTimes.Select((time, index) => new ImageEditWorker(index, time)).ToList();
@@ -63,6 +76,18 @@ namespace JobBalancer.App.Services
             return workers.Select(worker => splitJob[worker]).ToList();
         }
 
+        /// <summary>Method <c>TotalJobTime</c> calculate minimal time for processing images
+        /// <example>For example:
+        /// <code>
+        ///     IJobBalancerService service = new JobBalancerService();
+        ///     var totalTime = service.TotalJobTime(5, new List<int>(){2,3,4});
+        /// </code>
+        /// result <c>totalTime</c> is 6
+        /// </example>
+        /// </summary>
+        /// <exception cref="NoWorkersException"></exception>
+        /// <exception cref="NoWorkersWhichCanWorkException"></exception>
+        /// <exception cref="ArgumentException"></exception>
         public int TotalJobTime(int imageCount, List<int> processingTimes)
         {
             var works = SplitJob(imageCount, processingTimes);
