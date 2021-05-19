@@ -59,3 +59,6 @@ dotnet run
 ## Concept of architecture
 
 ![alt text](https://github.com/Toolf/MintInovationTestTask/blob/media/images/architecture.png)
+
+## Architecture implementation
+![alt text](https://github.com/Toolf/MintInovationTestTask/blob/media/images/architectureImplementation.png)
