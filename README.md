@@ -57,5 +57,5 @@ Solution for case:
 9. If people exist go to the step (1)
 
 Concept of implementation
-![alt text]
-(https://github.com/Toolf/MintnInovationTestTask/blob/media/images/architecture.png)
+
+![alt text](https://github.com/Toolf/MintnInovationTestTask/blob/media/images/architecture.png)
