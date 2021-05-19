@@ -1,6 +1,6 @@
-#MintnInovationTestTask
+# MintnInovationTestTask
 
-##Case
+## Case
 
 A job of 1000 images is going to be edited by a crew of 3 people:
 - P1: 1 image per 2 minutes
@@ -21,14 +21,14 @@ Please focus on:
 - Unit testing implementation 
 - General programing rules and standards usage.
 
-##How to run
-###Preparing
+## How to run
+### Preparing
 ```bash
 git clone https://github.com/Toolf/MintnInovationTestTask.git
 cd MintnInovationTestTask
 dotnet restore
 ```
-###Start server
+### Start server
 ```bash
 cd Dissolve.Server
 dotnet run
@@ -41,7 +41,7 @@ cd Dissolve.Client
 dotnet run
 ```
 
-Solution for case:
+## Solution for case:
 - P - people count.
 - i = 1..P - index of person.
 - Mi - minutes fot edit one image by i-th person.
@@ -56,6 +56,6 @@ Solution for case:
 8. Remove the slowest person
 9. If people exist go to the step (1)
 
-Concept of implementation
+## Concept of implementation
 
 ![alt text](https://github.com/Toolf/MintnInovationTestTask/blob/media/images/architecture.png)
