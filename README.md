@@ -27,7 +27,6 @@ Please focus on:
 ```bash
 git clone https://github.com/Toolf/MintInovationTestTask.git
 cd MintInovationTestTask
-dotnet restore
 ```
 ### Start server
 ```bash
