@@ -30,7 +30,7 @@ namespace JobBalancer.Client.Services
                 return new List<int>();
             }
 
-            return responseDto.Work;
+            return responseDto.Works;
         }
 
         public async Task<int> TotalTimeJob(int imageCount, List<int> processingTimes)

@@ -7,6 +7,22 @@ using NUnit.Framework;
 
 namespace JobBalancer.App.UnitTests
 {
+    public class TestData
+    {
+        public readonly int ImageCount;
+        public readonly List<int> ProcessingTimes;
+        public readonly int ExpectedTotalTime;
+        public readonly int ExpectedImageEdited;
+
+        public TestData(int imageCount, List<int> processingTimes, int expectedTotalTime, int expectedImageEdited)
+        {
+            ImageCount = imageCount;
+            ProcessingTimes = processingTimes;
+            ExpectedTotalTime = expectedTotalTime;
+            ExpectedImageEdited = expectedImageEdited;
+        }
+    }
+
     [TestFixture]
     public class JobBalancerServiceTests
     {
@@ -18,89 +34,55 @@ namespace JobBalancer.App.UnitTests
             _jobBalancerService = new JobBalancerService();
         }
 
-        [Test]
-        public void TestTotalTime()
+        private static readonly TestData[] Cases =
         {
-            var processingTimes = new List<int> {2, 3, 4};
-            const int imageCount = 1000;
+            new TestData(
+                1000,
+                new List<int> {2, 3, 4},
+                924,
+                1000
+            ),
+            new TestData(
+                1000,
+                new List<int> {7, 14, 35},
+                4123,
+                1000
+            ),
+            new TestData(
+                7217,
+                new List<int> {171, 635, 683},
+                812165,
+                7217
+            ),
+            new TestData(
+                1000,
+                new List<int> {2, 3, 4, -5},
+                924,
+                1000
+            ),
+            new TestData(
+                0,
+                new List<int> {2, 3, 4},
+                0,
+                0
+            )
+        };
 
-            var actualTotalTime = _jobBalancerService.TotalJobTime(imageCount, processingTimes);
-
-            const double expectedTotalTime = 924;
-            Assert.AreEqual(expectedTotalTime, actualTotalTime);
+        [Test]
+        [TestCaseSource(nameof(Cases))]
+        public void TestTotalTime(TestData testCase)
+        {
+            var actualTotalTime = _jobBalancerService.TotalJobTime(testCase.ImageCount, testCase.ProcessingTimes);
+            Assert.AreEqual(testCase.ExpectedTotalTime, actualTotalTime);
         }
 
         [Test]
-        public void TestIndividualJob()
+        [TestCaseSource(nameof(Cases))]
+        public void TestIndividualJob(TestData testCase)
         {
-            var processingTimes = new List<int> {2, 3, 4};
-
-            const int imageCount = 1000;
-
-            var works = _jobBalancerService.SplitJob(imageCount, processingTimes);
-
-            var actualTotalTime = processingTimes.Select((t, i) => works[i] * t).Prepend(0).Max();
+            var works = _jobBalancerService.SplitJob(testCase.ImageCount, testCase.ProcessingTimes);
             var actualImageEdited = works.Sum();
-
-            const double expectedTotalTime = 924;
-            const int expectedImageEdited = 1000;
-            Assert.AreEqual(expectedTotalTime, actualTotalTime);
-            Assert.AreEqual(expectedImageEdited, actualImageEdited);
-        }
-
-        [Test]
-        public void TestIndividualJob2()
-        {
-            var processingTimes = new List<int> {7, 14, 35};
-
-            const int imageCount = 1000;
-
-            var works = _jobBalancerService.SplitJob(imageCount, processingTimes);
-
-            var actualTotalTime = processingTimes.Select((t, i) => works[i] * t).Prepend(0).Max();
-            var actualImageEdited = works.Sum();
-
-            const double expectedTotalTime = 4123;
-            const int expectedImageEdited = 1000;
-            Assert.AreEqual(expectedTotalTime, actualTotalTime);
-            Assert.AreEqual(expectedImageEdited, actualImageEdited);
-        }
-
-        [Test]
-        public void TestIndividualJob3()
-        {
-            var processingTimes = new List<int> {171, 635, 683};
-
-            const int imageCount = 7217;
-
-            var works = _jobBalancerService.SplitJob(imageCount, processingTimes);
-
-            var actualTotalTime = processingTimes.Select((t, i) => works[i] * t).Prepend(0).Max();
-            var actualImageEdited = works.Sum();
-
-            const double expectedTotalTime = 812165;
-            const int expectedImageEdited = 7217;
-            Assert.AreEqual(expectedTotalTime, actualTotalTime);
-            Assert.AreEqual(expectedImageEdited, actualImageEdited);
-        }
-
-        [Test]
-        public void TestIgnoreWorkerWithNotPositiveTimeProcessing()
-        {
-            var processingTimes = new List<int> {2, 3, 4, -5};
-
-            const int imageCount = 1000;
-
-            var works = _jobBalancerService.SplitJob(imageCount, processingTimes);
-
-            var actualTotalTime = processingTimes.Select((t, i) => works[i] * t).Prepend(0).Max();
-            var actualImageEdited = works.Sum();
-
-
-            const double expectedTotalTime = 924;
-            const int expectedImageEdited = 1000;
-            Assert.AreEqual(expectedTotalTime, actualTotalTime);
-            Assert.AreEqual(expectedImageEdited, actualImageEdited);
+            Assert.AreEqual(testCase.ExpectedImageEdited, actualImageEdited);
         }
 
         [Test]
@@ -120,7 +102,20 @@ namespace JobBalancer.App.UnitTests
 
             const int imageCount = 1000;
 
-            Assert.Throws<NoWorkersWhichCanWorkException>(() => { _jobBalancerService.SplitJob(imageCount, processingTimes); });
+            Assert.Throws<NoWorkersWhichCanWorkException>(() =>
+            {
+                _jobBalancerService.SplitJob(imageCount, processingTimes);
+            });
+        }
+
+        [Test]
+        public void TestNegativeImageCount()
+        {
+            var processingTimes = new List<int> {2, 3, 5};
+
+            const int imageCount = -1000;
+
+            Assert.Throws<ArgumentException>(() => { _jobBalancerService.SplitJob(imageCount, processingTimes); });
         }
     }
 }

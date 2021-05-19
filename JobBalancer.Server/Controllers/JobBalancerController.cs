@@ -29,7 +29,7 @@ namespace JobBalancer.Server.Controllers
                 var splitJob = _jobBalancerService.SplitJob(imageCount, processingTimes);
                 var responseDto = new JobBalancerResponseDto()
                 {
-                    Work = splitJob
+                    Works = splitJob
                 };
                 return Ok(responseDto);
             }

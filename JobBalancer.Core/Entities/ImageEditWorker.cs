@@ -4,36 +4,13 @@ namespace JobBalancer.Core.Entities
 {
     public class ImageEditWorker
     {
-        public int TimeProcessing { get; set; }
-        public int Id { get; set; }
-
-        public ImageEditWorker()
-        {
-            TimeProcessing = 1;
-            Id = 0;
-        }
-
-        public ImageEditWorker(int id)
-        {
-            TimeProcessing = 1;
-            Id = id;
-        }
+        public int TimeProcessing { get; }
+        public int Id { get; }
 
         public ImageEditWorker(int id, int timeProcessing)
         {
             Id = id;
             TimeProcessing = timeProcessing;
-        }
-
-        public double JobPerformance()
-        {
-            // ReSharper disable once PossibleLossOfFraction
-            return (double) 1 / TimeProcessing;
-        }
-
-        public int JobExecutingSpeed()
-        {
-            return TimeProcessing;
         }
 
         protected bool Equals(ImageEditWorker other)
@@ -45,7 +22,7 @@ namespace JobBalancer.Core.Entities
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (obj.GetType() != GetType()) return false;
             return Equals((ImageEditWorker) obj);
         }
 
