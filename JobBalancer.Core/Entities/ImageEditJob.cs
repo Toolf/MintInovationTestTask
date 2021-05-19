@@ -1,4 +1,4 @@
-﻿namespace JobBalancer.Shared.Entities
+﻿namespace JobBalancer.Core.Entities
 {
     public class ImageEditJob
     {

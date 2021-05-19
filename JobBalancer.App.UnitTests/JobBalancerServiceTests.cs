@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using JobBalancer.App.Exceptions;
 using JobBalancer.App.Services;
-using JobBalancer.Shared.Entities;
 using NUnit.Framework;
 
 namespace JobBalancer.App.UnitTests
@@ -21,15 +21,10 @@ namespace JobBalancer.App.UnitTests
         [Test]
         public void TestTotalTime()
         {
-            var workers = new List<ImageEditWorker>
-            {
-                new ImageEditWorker(1, 2),
-                new ImageEditWorker(2, 3),
-                new ImageEditWorker(3, 4)
-            };
+            var processingTimes = new List<int> {2, 3, 4};
             const int imageCount = 1000;
 
-            var actualTotalTime = _jobBalancerService.TotalJobTime(imageCount, workers);
+            var actualTotalTime = _jobBalancerService.TotalJobTime(imageCount, processingTimes);
 
             const double expectedTotalTime = 924;
             Assert.AreEqual(expectedTotalTime, actualTotalTime);
@@ -38,25 +33,14 @@ namespace JobBalancer.App.UnitTests
         [Test]
         public void TestIndividualJob()
         {
-            var workers = new List<ImageEditWorker>
-            {
-                new ImageEditWorker(1, 2),
-                new ImageEditWorker(2, 3),
-                new ImageEditWorker(3, 4)
-            };
+            var processingTimes = new List<int> {2, 3, 4};
 
             const int imageCount = 1000;
 
-            var splitJob = _jobBalancerService.SplitJob(imageCount, workers);
+            var works = _jobBalancerService.SplitJob(imageCount, processingTimes);
 
-            var actualTotalTime = 0.0;
-            var actualImageEdited = 0;
-            foreach (var (worker, individualImageCount) in splitJob)
-            {
-                // ReSharper disable once PossibleInvalidOperationException
-                actualTotalTime = Math.Max(actualTotalTime, individualImageCount * worker.TimeProcessing);
-                actualImageEdited += individualImageCount;
-            }
+            var actualTotalTime = processingTimes.Select((t, i) => works[i] * t).Prepend(0).Max();
+            var actualImageEdited = works.Sum();
 
             const double expectedTotalTime = 924;
             const int expectedImageEdited = 1000;
@@ -67,25 +51,14 @@ namespace JobBalancer.App.UnitTests
         [Test]
         public void TestIndividualJob2()
         {
-            var workers = new List<ImageEditWorker>
-            {
-                new ImageEditWorker(1, 7),
-                new ImageEditWorker(2, 14),
-                new ImageEditWorker(3, 35)
-            };
+            var processingTimes = new List<int> {7, 14, 35};
 
             const int imageCount = 1000;
 
-            var splitJob = _jobBalancerService.SplitJob(imageCount, workers);
+            var works = _jobBalancerService.SplitJob(imageCount, processingTimes);
 
-            var actualTotalTime = 0.0;
-            var actualImageEdited = 0;
-            foreach (var (worker, individualImageCount) in splitJob)
-            {
-                // ReSharper disable once PossibleInvalidOperationException
-                actualTotalTime = Math.Max(actualTotalTime, individualImageCount * worker.TimeProcessing);
-                actualImageEdited += individualImageCount;
-            }
+            var actualTotalTime = processingTimes.Select((t, i) => works[i] * t).Prepend(0).Max();
+            var actualImageEdited = works.Sum();
 
             const double expectedTotalTime = 4123;
             const int expectedImageEdited = 1000;
@@ -96,25 +69,14 @@ namespace JobBalancer.App.UnitTests
         [Test]
         public void TestIndividualJob3()
         {
-            var workers = new List<ImageEditWorker>
-            {
-                new ImageEditWorker(1, 171),
-                new ImageEditWorker(2, 635),
-                new ImageEditWorker(3, 683)
-            };
+            var processingTimes = new List<int> {171, 635, 683};
 
             const int imageCount = 7217;
 
-            var splitJob = _jobBalancerService.SplitJob(imageCount, workers);
+            var works = _jobBalancerService.SplitJob(imageCount, processingTimes);
 
-            var actualTotalTime = 0.0;
-            var actualImageEdited = 0;
-            foreach (var (worker, individualImageCount) in splitJob)
-            {
-                // ReSharper disable once PossibleInvalidOperationException
-                actualTotalTime = Math.Max(actualTotalTime, individualImageCount * worker.TimeProcessing);
-                actualImageEdited += individualImageCount;
-            }
+            var actualTotalTime = processingTimes.Select((t, i) => works[i] * t).Prepend(0).Max();
+            var actualImageEdited = works.Sum();
 
             const double expectedTotalTime = 812165;
             const int expectedImageEdited = 7217;
@@ -125,26 +87,15 @@ namespace JobBalancer.App.UnitTests
         [Test]
         public void TestIgnoreWorkerWithNotPositiveTimeProcessing()
         {
-            var workers = new List<ImageEditWorker>
-            {
-                new ImageEditWorker(1, 2),
-                new ImageEditWorker(2, 3),
-                new ImageEditWorker(3, 4),
-                new ImageEditWorker(4, -5)
-            };
+            var processingTimes = new List<int> {2, 3, 4, -5};
 
             const int imageCount = 1000;
 
-            var splitJob = _jobBalancerService.SplitJob(imageCount, workers);
+            var works = _jobBalancerService.SplitJob(imageCount, processingTimes);
 
-            var actualTotalTime = 0.0;
-            var actualImageEdited = 0;
-            foreach (var (worker, individualImageCount) in splitJob)
-            {
-                // ReSharper disable once PossibleInvalidOperationException
-                actualTotalTime = Math.Max(actualTotalTime, individualImageCount * worker.TimeProcessing);
-                actualImageEdited += individualImageCount;
-            }
+            var actualTotalTime = processingTimes.Select((t, i) => works[i] * t).Prepend(0).Max();
+            var actualImageEdited = works.Sum();
+
 
             const double expectedTotalTime = 924;
             const int expectedImageEdited = 1000;
@@ -155,26 +106,21 @@ namespace JobBalancer.App.UnitTests
         [Test]
         public void TestWithoutWorkers()
         {
-            var workers = new List<ImageEditWorker>();
+            var processingTimes = new List<int>();
 
             const int imageCount = 1000;
 
-            Assert.Throws<NoWorkersException>(() => { _jobBalancerService.SplitJob(imageCount, workers); });
+            Assert.Throws<NoWorkersException>(() => { _jobBalancerService.SplitJob(imageCount, processingTimes); });
         }
 
         [Test]
         public void TestNoWorkerWhichCanWork()
         {
-            var workers = new List<ImageEditWorker>
-            {
-                new ImageEditWorker(1, 0),
-                new ImageEditWorker(2, -2),
-                new ImageEditWorker(3, -1)
-            };
+            var processingTimes = new List<int> {0, -2, -1};
 
             const int imageCount = 1000;
 
-            Assert.Throws<NoWorkersWhichCanWorkException>(() => { _jobBalancerService.SplitJob(imageCount, workers); });
+            Assert.Throws<NoWorkersWhichCanWorkException>(() => { _jobBalancerService.SplitJob(imageCount, processingTimes); });
         }
     }
 }

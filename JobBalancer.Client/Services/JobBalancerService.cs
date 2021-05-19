@@ -5,7 +5,6 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using JobBalancer.Shared.DTO;
-using JobBalancer.Shared.Entities;
 
 namespace JobBalancer.Client.Services
 {
@@ -18,28 +17,27 @@ namespace JobBalancer.Client.Services
             _http = http;
         }
 
-        public async Task<Dictionary<ImageEditWorker, int>> SplitJob(int imageCount, List<ImageEditWorker> workers)
+        public async Task<List<int>> SplitJob(int imageCount, List<int> processingTimes)
         {
             using var response = await _http.PostAsJsonAsync(
                 "https://localhost:5001/api/jobBalancer/split",
-                new JobBalancerRequestDto {ImageCount = imageCount, Workers = workers});
+                new JobBalancerRequestDto {ImageCount = imageCount, ProcessingTimes = processingTimes});
             var responseDto =
                 await response.Content.ReadFromJsonAsync<JobBalancerResponseDto>();
             if (!response.IsSuccessStatusCode)
             {
                 var errorMessage = response.ReasonPhrase;
-                return new Dictionary<ImageEditWorker, int>();
+                return new List<int>();
             }
 
-            var res = responseDto.Work.ToDictionary(x => x.Worker, x => x.ImageEdit);
-            return res;
+            return responseDto.Work;
         }
 
-        public async Task<int> TotalTimeJob(int imageCount, List<ImageEditWorker> workers)
+        public async Task<int> TotalTimeJob(int imageCount, List<int> processingTimes)
         {
             using var response = await _http.PostAsJsonAsync(
                 "https://localhost:5001/api/jobBalancer/totalTime",
-                new JobBalancerRequestDto {ImageCount = imageCount, Workers = workers});
+                new JobBalancerRequestDto {ImageCount = imageCount, ProcessingTimes = processingTimes});
             var totalTime = await response.Content.ReadFromJsonAsync<int>();
 
             if (!response.IsSuccessStatusCode)

@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobBalancer.App", "JobBalan
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobBalancer.App.UnitTests", "JobBalancer.App.UnitTests\JobBalancer.App.UnitTests.csproj", "{54DF72A1-E78E-4EAE-BEFF-1ED09F977EA8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobBalancer.Core", "JobBalancer.Core\JobBalancer.Core.csproj", "{7265D783-6E6F-4286-814D-F8998F1599F0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{54DF72A1-E78E-4EAE-BEFF-1ED09F977EA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{54DF72A1-E78E-4EAE-BEFF-1ED09F977EA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54DF72A1-E78E-4EAE-BEFF-1ED09F977EA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7265D783-6E6F-4286-814D-F8998F1599F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7265D783-6E6F-4286-814D-F8998F1599F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7265D783-6E6F-4286-814D-F8998F1599F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7265D783-6E6F-4286-814D-F8998F1599F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

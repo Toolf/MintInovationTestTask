@@ -1,5 +1,4 @@
 ﻿@page "/dissolveJob"
-@using global::JobBalancer.Shared.Entities
 @using Microsoft.Extensions.Logging
 
 @inject Services.IJobBalancerService _jobBalancerService
@@ -63,16 +62,14 @@
 
     private async void Calculate()
     {
-        var workers = WorkersSpeed.Select((speed, id) => new ImageEditWorker(id, speed)).ToList();
-
         try
         {
-            var works = await _jobBalancerService.SplitJob(ImageCount, workers);
-            TotalTime = await _jobBalancerService.TotalTimeJob(ImageCount, workers);
-            for (var i = 0; i < workers.Count; i++)
+            var works = await _jobBalancerService.SplitJob(ImageCount, WorkersSpeed);
+            TotalTime = await _jobBalancerService.TotalTimeJob(ImageCount, WorkersSpeed);
+            for (var i = 0; i < works.Count; i++)
             {
-                ImageEdit[i] = works[workers[i]];
-                WorkTime[i] = ImageEdit[i] * workers[i].TimeProcessing;
+                ImageEdit[i] = works[i];
+                WorkTime[i] = works[i] * WorkersSpeed[i];
             }
 
             StateHasChanged();
