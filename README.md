@@ -24,20 +24,20 @@ Please focus on:
 ## How to run
 ### Preparing
 ```bash
-git clone https://github.com/Toolf/MintnInovationTestTask.git
-cd MintnInovationTestTask
+git clone https://github.com/Toolf/MintInovationTestTask.git
+cd MintInovationTestTask
 dotnet restore
 ```
 ### Start server
 ```bash
-cd Dissolve.Server
+cd JobBalancer.Server
 dotnet run
 ```
 
 ### Start client
 
 ```bash
-cd Dissolve.Client
+cd JobBalancer.Client
 dotnet run
 ```
 
