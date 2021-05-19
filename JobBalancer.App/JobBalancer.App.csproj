@@ -6,7 +6,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\JobBalancer.Core\JobBalancer.Core.csproj" />
-      <ProjectReference Include="..\JobBalancer.Shared\JobBalancer.Shared.csproj" />
     </ItemGroup>
 
 </Project>
