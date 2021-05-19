@@ -48,8 +48,8 @@ dotnet run
 - Fi - images by 1 minute edit by i-th person.
 1. Calculate F = sum(Fi), i=1...P.
 2. Minimum time for edit all pages Tmin = (image count) / F.
-3. Round Tmin by the biggest Mi to the largest and save in Tmax.
-4. Calculate how many images peoples can edit by time Tmax and save in TotalImageEdited.
+3. Round Tmin by the biggest Mi to the largest and save as Tmax.
+4. Calculate how many images peoples can edit by time Tmax and save as TotalImageEdited.
 5. If TotalImageEdited more them image count, sub the biggest Mi from Tmax.
 6. Calculate how many images the slowest person edit by Tmax and save this amount to ImageEdited.
 7. Reduce image count by ImageEdited.
