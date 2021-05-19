@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using JobBalancer.Shared.Entities;
 
 namespace JobBalancer.App.Services
 {

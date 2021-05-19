@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using JobBalancer.App.Exceptions;
 using JobBalancer.App.Services;
-using JobBalancer.Shared.Entities;
 using NUnit.Framework;
 
 namespace JobBalancer.App.UnitTests

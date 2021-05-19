@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using JobBalancer.Shared.Entities;
 using JobBalancer.App.Exceptions;
+using JobBalancer.Core.Entities;
 
 namespace JobBalancer.App.Services
 {

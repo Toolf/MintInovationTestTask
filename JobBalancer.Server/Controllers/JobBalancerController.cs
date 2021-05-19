@@ -3,7 +3,6 @@ using System.Linq;
 using JobBalancer.App.Exceptions;
 using JobBalancer.App.Services;
 using JobBalancer.Shared.DTO;
-using JobBalancer.Shared.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JobBalancer.Server.Controllers
