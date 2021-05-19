@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using JobBalancer.App.Exceptions;
 using JobBalancer.App.Services;
 using JobBalancer.Shared.DTO;

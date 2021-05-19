@@ -17,7 +17,7 @@ namespace JobBalancer.App.Services
         ///     IJobBalancerService service = new JobBalancerService();
         ///     var works = service.SplitJob(5, new List<int>(){2,3,4});
         /// </code>
-        /// result <c>works</c> is (3, 1, 1) 
+        /// result <c>works</c> is (2, 2, 1) 
         /// </example>
         /// </summary>
         /// <exception cref="NoWorkersException"></exception>
