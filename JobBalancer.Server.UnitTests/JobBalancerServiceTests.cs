@@ -124,6 +124,36 @@ namespace Dissolve.Server.UnitTests
         }
 
         [Test]
+        public void TestIgnoreWorkerWithNotPositiveTimeProcessing()
+        {
+            var workers = new List<ImageEditWorker>
+            {
+                new ImageEditWorker(1, 2),
+                new ImageEditWorker(2, 3),
+                new ImageEditWorker(3, 4),
+                new ImageEditWorker(4, -5)
+            };
+
+            const int imageCount = 1000;
+
+            var splitJob = jobBalancerService.SplitJob(imageCount, workers);
+
+            var actualTotalTime = 0.0;
+            var actualImageEdited = 0;
+            foreach (var (worker, individualImageCount) in splitJob)
+            {
+                // ReSharper disable once PossibleInvalidOperationException
+                actualTotalTime = Math.Max(actualTotalTime, individualImageCount * worker.TimeProcessing);
+                actualImageEdited += individualImageCount;
+            }
+
+            const double expectedTotalTime = 924;
+            const int expectedImageEdited = 1000;
+            Assert.AreEqual(expectedTotalTime, actualTotalTime);
+            Assert.AreEqual(expectedImageEdited, actualImageEdited);
+        }
+
+        [Test]
         public void TestWithoutWorkers()
         {
             var workers = new List<ImageEditWorker>();
@@ -134,7 +164,7 @@ namespace Dissolve.Server.UnitTests
         }
 
         [Test]
-        public void TestWorkerWithNotPositiveTimeProcessing()
+        public void TestNoWorkerWhichCanWork()
         {
             var workers = new List<ImageEditWorker>
             {
