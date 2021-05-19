@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using JobBalancer.Shared.Entities;
 
-namespace JobBalancer.Server.Services
+namespace JobBalancer.App.Services
 {
     public interface IJobBalancerService
     {

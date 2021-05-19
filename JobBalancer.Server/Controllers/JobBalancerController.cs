@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
+using JobBalancer.App.Exceptions;
+using JobBalancer.App.Services;
 using JobBalancer.Shared.DTO;
-using JobBalancer.Server.Exceptions;
-using JobBalancer.Server.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JobBalancer.Server.Controllers
@@ -11,6 +11,13 @@ namespace JobBalancer.Server.Controllers
     [ApiController]
     public class JobBalancerController : ControllerBase
     {
+        private readonly IJobBalancerService _jobBalancerService;
+
+        public JobBalancerController(IJobBalancerService jobBalancerService)
+        {
+            _jobBalancerService = jobBalancerService;
+        }
+
         [HttpPost]
         [Route("split")]
         public ActionResult<JobBalancerResponseDto> SplitJob([FromBody] JobBalancerRequestDto req)
@@ -20,8 +27,7 @@ namespace JobBalancer.Server.Controllers
 
             try
             {
-                var service = new DissolveJobService();
-                var splitJob = service.SplitJob(imageCount, workers);
+                var splitJob = _jobBalancerService.SplitJob(imageCount, workers);
                 var responseDto = new JobBalancerResponseDto()
                 {
                     Work = splitJob.Select((x) => new IndividualWork()
@@ -38,7 +44,6 @@ namespace JobBalancer.Server.Controllers
             }
             catch (ArgumentException e)
             {
-                
                 return UnprocessableEntity(e.Message);
             }
         }
@@ -52,17 +57,16 @@ namespace JobBalancer.Server.Controllers
 
             try
             {
-                var service = new DissolveJobService();
-                var totalTime = service.TotalJobTime(imageCount, workers);
+                var totalTime = _jobBalancerService.TotalJobTime(imageCount, workers);
                 return Ok(totalTime);
             }
             catch (NoWorkersException e)
             {
-                return BadRequest("List of workers should not be empty.");
+                return UnprocessableEntity("List of workers should not be empty.");
             }
             catch (ArgumentException e)
             {
-                return BadRequest(e.Message);
+                return UnprocessableEntity(e.Message);
             }
         }
     }

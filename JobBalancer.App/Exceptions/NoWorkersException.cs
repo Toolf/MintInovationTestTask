@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace JobBalancer.Server.Exceptions
+namespace JobBalancer.App.Exceptions
 {
     public class NoWorkersException : Exception
     {

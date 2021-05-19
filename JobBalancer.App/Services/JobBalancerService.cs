@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
+using System.Data;
 using System.Linq;
 using JobBalancer.Shared.Entities;
-using JobBalancer.Server.Exceptions;
+using JobBalancer.App.Exceptions;
 
-namespace JobBalancer.Server.Services
+namespace JobBalancer.App.Services
 {
-    public class DissolveJobService : IJobBalancerService
+    public class JobBalancerService : IJobBalancerService
     {
         public Dictionary<ImageEditWorker, int> SplitJob(int imageCount, List<ImageEditWorker> workers)
         {

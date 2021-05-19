@@ -30,7 +30,7 @@ namespace JobBalancer.Client.Services
                 var errorMessage = response.ReasonPhrase;
                 return new Dictionary<ImageEditWorker, int>();
             }
-            Console.WriteLine(response.IsSuccessStatusCode);
+
             var res = responseDto.Work.ToDictionary(x => x.Worker, x => x.ImageEdit);
             return res;
         }
@@ -45,7 +45,6 @@ namespace JobBalancer.Client.Services
             if (!response.IsSuccessStatusCode)
             {
                 var errorMessage = response.ReasonPhrase;
-                Console.WriteLine($"There was an error! {errorMessage}");
                 return 0;
             }
 

@@ -2,7 +2,7 @@
 @using global::JobBalancer.Shared.Entities
 @using Microsoft.Extensions.Logging
 
-@inject Client.Services.IJobBalancerService _jobBalancerService
+@inject Services.IJobBalancerService _jobBalancerService
 @inject ILogger<JobBalancerPage> _logger
 
 <h1>Total time: @TotalTime</h1>
@@ -79,7 +79,7 @@
         }
         catch (Exception e)
         {
-            _logger.LogWarning(e, $"Failed do job split with {ImageCount} images and [{string.Join(",", WorkersSpeed)}] worker speeds");
+            _logger.LogDebug(e, $"Failed do job split with {ImageCount} images and [{string.Join(",", WorkersSpeed)}] worker speeds");
         }
     }
 

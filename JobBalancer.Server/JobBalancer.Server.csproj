@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\JobBalancer.App\JobBalancer.App.csproj" />
       <ProjectReference Include="..\JobBalancer.Shared\JobBalancer.Shared.csproj" />
     </ItemGroup>
 

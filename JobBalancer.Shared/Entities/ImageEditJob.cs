@@ -1,6 +1,6 @@
 ﻿namespace JobBalancer.Shared.Entities
 {
-    public class ImageEditJob 
+    public class ImageEditJob
     {
         protected bool Equals(ImageEditJob other)
         {
