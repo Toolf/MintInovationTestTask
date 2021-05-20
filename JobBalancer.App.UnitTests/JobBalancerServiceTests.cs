@@ -28,9 +28,9 @@ namespace JobBalancer.App.UnitTests
     public class JobBalancerServiceTests
     {
         private IJobBalancerService _jobBalancerService;
-        private const int MaxRandomWorkersCount = 10;
-        private const int MaxRandomProcessingTime = 10;
-        private const int MaxRandomImageCount = 10;
+        private const int MaxRandomWorkersCount = 20;
+        private const int MaxRandomProcessingTime = 100;
+        private const int MaxRandomImageCount = 10000;
 
         [SetUp]
         public void Setup()
@@ -109,7 +109,7 @@ namespace JobBalancer.App.UnitTests
 
         private static TestData RandomCase()
         {
-            var rand = new Random(100);
+            var rand = new Random();
             var workersCount = rand.Next(MaxRandomWorkersCount);
             var processingTimes = new List<int>(workersCount);
             for (var i = 0; i < workersCount; i++)
@@ -137,8 +137,6 @@ namespace JobBalancer.App.UnitTests
         public void TestTotalTime(TestData testCase)
         {
             var actualTotalTime = _jobBalancerService.TotalJobTime(testCase.ImageCount, testCase.ProcessingTimes);
-            Console.WriteLine(actualTotalTime);
-            Console.WriteLine(testCase.ExpectedTotalTime);
             Assert.AreEqual(testCase.ExpectedTotalTime, actualTotalTime);
         }
 
@@ -148,8 +146,6 @@ namespace JobBalancer.App.UnitTests
         {
             var actualTotalTime = _jobBalancerService.TotalJobTime(testCase.ImageCount, testCase.ProcessingTimes);
             testCase.ProcessingTimes.ForEach(Console.WriteLine);
-            Console.WriteLine(actualTotalTime);
-            Console.WriteLine(testCase.ExpectedTotalTime);
             Assert.AreEqual(testCase.ExpectedTotalTime, actualTotalTime,
                 $"{testCase.ImageCount}, {testCase.ProcessingTimes}");
         }
