@@ -44,7 +44,7 @@ namespace JobBalancer.App.Services
             if (imageCount < 0)
                 throw new ArgumentException("Bad image count. Image count must be not negative number.");
 
-            var orderedWorkers = filteredWorkers.OrderBy((w) => w.TimeProcessing).ToList();
+            var orderedWorkers = filteredWorkers.OrderByDescending((w) => w.TimeProcessing).ToList();
             for (var slowestWorkerIndex = 0; slowestWorkerIndex < orderedWorkers.Count; slowestWorkerIndex++)
             {
                 double totalFrequency = 0;

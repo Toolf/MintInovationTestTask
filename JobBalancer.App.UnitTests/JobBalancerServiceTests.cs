@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using JobBalancer.App.Exceptions;
 using JobBalancer.App.Services;
 using NUnit.Framework;
@@ -27,6 +28,9 @@ namespace JobBalancer.App.UnitTests
     public class JobBalancerServiceTests
     {
         private IJobBalancerService _jobBalancerService;
+        private const int MaxRandomWorkersCount = 10;
+        private const int MaxRandomProcessingTime = 10;
+        private const int MaxRandomImageCount = 10;
 
         [SetUp]
         public void Setup()
@@ -65,20 +69,103 @@ namespace JobBalancer.App.UnitTests
                 new List<int> {2, 3, 4},
                 0,
                 0
+            ),
+            new TestData(
+                9,
+                new List<int> {2, 7, 9, 4, 9, 7, 6, 4, 2, 7, 6},
+                6,
+                9
             )
         };
+
+        private static List<int> SplitJobSimulator(int imageCount, List<int> processingTimes)
+        {
+            var time = 1;
+            var imageEdited = 0;
+            var individualWork = new List<int>(processingTimes.Count);
+            for (var i = 0; i < processingTimes.Count; i++)
+            {
+                individualWork.Add(0);
+            }
+
+            while (true)
+            {
+                for (var i = 0; i < processingTimes.Count; i++)
+                {
+                    var editImage = time % processingTimes[i] == 0;
+                    if (!editImage) continue;
+
+                    individualWork[i]++;
+                    imageEdited++;
+                    if (imageEdited == imageCount)
+                    {
+                        return individualWork;
+                    }
+                }
+
+                time++;
+            }
+        }
+
+        private static TestData RandomCase()
+        {
+            var rand = new Random(100);
+            var workersCount = rand.Next(MaxRandomWorkersCount);
+            var processingTimes = new List<int>(workersCount);
+            for (var i = 0; i < workersCount; i++)
+            {
+                processingTimes.Add(rand.Next(1, MaxRandomProcessingTime));
+            }
+
+            var imageCount = rand.Next(MaxRandomImageCount);
+            var individualWorks = SplitJobSimulator(imageCount, processingTimes);
+
+            var expectedTotalTime = 0;
+            for (var i = 0; i < workersCount; i++)
+            {
+                expectedTotalTime = Math.Max(expectedTotalTime, individualWorks[i] * processingTimes[i]);
+            }
+
+            var test = new TestData(imageCount, processingTimes, expectedTotalTime, imageCount);
+            return test;
+        }
+
+        private static readonly TestData[] RandomCases = Enumerable.Repeat(RandomCase(), 100).ToArray();
 
         [Test]
         [TestCaseSource(nameof(Cases))]
         public void TestTotalTime(TestData testCase)
         {
             var actualTotalTime = _jobBalancerService.TotalJobTime(testCase.ImageCount, testCase.ProcessingTimes);
+            Console.WriteLine(actualTotalTime);
+            Console.WriteLine(testCase.ExpectedTotalTime);
             Assert.AreEqual(testCase.ExpectedTotalTime, actualTotalTime);
+        }
+
+        [Test]
+        [TestCaseSource(nameof(RandomCases))]
+        public void TestTotalTimeRandomCases(TestData testCase)
+        {
+            var actualTotalTime = _jobBalancerService.TotalJobTime(testCase.ImageCount, testCase.ProcessingTimes);
+            testCase.ProcessingTimes.ForEach(Console.WriteLine);
+            Console.WriteLine(actualTotalTime);
+            Console.WriteLine(testCase.ExpectedTotalTime);
+            Assert.AreEqual(testCase.ExpectedTotalTime, actualTotalTime,
+                $"{testCase.ImageCount}, {testCase.ProcessingTimes}");
         }
 
         [Test]
         [TestCaseSource(nameof(Cases))]
         public void TestIndividualJob(TestData testCase)
+        {
+            var works = _jobBalancerService.SplitJob(testCase.ImageCount, testCase.ProcessingTimes);
+            var actualImageEdited = works.Sum();
+            Assert.AreEqual(testCase.ExpectedImageEdited, actualImageEdited);
+        }
+
+        [Test]
+        [TestCaseSource(nameof(RandomCases))]
+        public void TestIndividualJobRandomCases(TestData testCase)
         {
             var works = _jobBalancerService.SplitJob(testCase.ImageCount, testCase.ProcessingTimes);
             var actualImageEdited = works.Sum();
